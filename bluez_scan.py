@@ -16,11 +16,11 @@ OCF_LE_SET_SCAN_ENABLE = 0x000C
 try:
   # Open the bluetooth device
   sock = bluez.hci_open_dev(0)
-  print "BLE scan started"
+  print("BLE scan started")
 except:
   # Failed to open
   sock = None
-  print "Failed to open BLE device."
+  print("Failed to open BLE device.")
 
 if sock:
   # We have device access, start BLE scan
@@ -36,7 +36,7 @@ if sock:
     bluez.hci_filter_set_ptype(flt, bluez.HCI_EVENT_PKT)
     sock.setsockopt(bluez.SOL_HCI, bluez.HCI_FILTER, flt)
     # Get and decode data
-    print decode_beacon.bluez_decode_beacons(sock.recv(255))
+    print(decode_beacon.bluez_decode_beacons(sock.recv(255)))
     # Restore the filter setting
     sock.setsockopt(bluez.SOL_HCI, bluez.HCI_FILTER, old_filter)
 
