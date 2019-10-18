@@ -9,6 +9,8 @@ import decode_beacon
 import bluetooth._bluetooth as bluez
 import struct
 
+# Flag to only produce output when beacons are actually found
+SUPPRESS_EMPTY_OUTPUT = True
 
 OGF_LE_CTL = 0x08
 OCF_LE_SET_SCAN_ENABLE = 0x000C
@@ -36,7 +38,9 @@ if sock:
     bluez.hci_filter_set_ptype(flt, bluez.HCI_EVENT_PKT)
     sock.setsockopt(bluez.SOL_HCI, bluez.HCI_FILTER, flt)
     # Get and decode data
-    print(decode_beacon.bluez_decode_beacons(sock.recv(255)))
+    beacondata = decode_beacon.bluez_decode_beacons(sock.recv(255))
+    if beacondata or not SUPPRESS_EMPTY_OUTPUT:
+      print(beacondata)
     # Restore the filter setting
     sock.setsockopt(bluez.SOL_HCI, bluez.HCI_FILTER, old_filter)
 
