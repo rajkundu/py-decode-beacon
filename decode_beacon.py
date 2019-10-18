@@ -236,8 +236,8 @@ def decode_ad_report(ad_packet):
       for key, val in beacon_data.items():
         if key != 'adstruct_bytes':
           ret[key] = val
-      # Add observed RSSI to return object
-      ret['rssi_obs'] = ad_packet[aih.length + 9]
+      # Add observed RSSI to return object after converting from unsigned to signed via Two's complement
+      ret['rssi_obs'] = int.from_bytes(ad_packet[aih.length + 9].to_bytes(1, byteorder='little', signed=False), byteorder='little', signed=True)
   # Return the return object
   return ret
 
