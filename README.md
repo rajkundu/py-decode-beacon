@@ -1,4 +1,5 @@
 # Python beacon advertisement decoder
+## Updated to Python 3.7.3 by Raj Kundu
 
 Copyright (c) 2015 Patrick Van Oosterwijck
 
