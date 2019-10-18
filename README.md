@@ -22,4 +22,6 @@ The file [decode_test.py](decode_test.py) contains a couple of simple hardcoded 
 The file [bluez_scan.py](bluez_scan.py) contains a simple BlueZ HCI advertisement packet scanner based on [this code](https://github.com/switchdoclabs/iBeacon-Scanner-).
 
 ## Fork-specific Notes
-- This fork is only meant to work for iBeacons and thus only pertinent code will be maintained.
+- This fork is currently only meant to work for iBeacons and thus only pertinent code will be maintained.
+– [decode_test.py](decode_test.py) does not function properly with Python 3
+- Indentation is 2 spaces, but should/will be fixed to tabs in the future
