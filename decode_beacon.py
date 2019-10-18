@@ -29,7 +29,7 @@ def decode_ibeacon(ad_struct):
     type: None for unknown
   """
   # Get the length of the ad structure (including the length byte)
-  adstruct_bytes = ord(ad_struct[0]) + 1
+  adstruct_bytes = ad_struct[0] + 1
   # Create the return object
   ret = { 'adstruct_bytes': adstruct_bytes, 'type': None }
   # Is the length correct and is our data long enough?
@@ -69,7 +69,7 @@ def decode_altbeacon(ad_struct):
     type: None for unknown  
   """
   # Get the length of the ad structure (including the length byte)
-  adstruct_bytes = ord(ad_struct[0]) + 1
+  adstruct_bytes = ad_struct[0] + 1
   # Create the return object
   ret = { 'adstruct_bytes': adstruct_bytes, 'type': None }
   # Is the length correct and is our data long enough?
@@ -120,7 +120,7 @@ def decode_eddystone(ad_struct):
     type: None for unknown  
   """
   # Get the length of the ad structure (including the length byte)
-  adstruct_bytes = ord(ad_struct[0]) + 1
+  adstruct_bytes = ad_struct[0] + 1
   # Create the return object
   ret = { 'adstruct_bytes': adstruct_bytes, 'type': None }
   # Is our data long enough to decode as Eddystone?
@@ -205,8 +205,7 @@ def decode_ad_report(ad_packet):
   # Check that we have the minimum ad info header length
   if len(ad_packet) >= 9:
     # Decode advertising report header
-    AdInfoHeader = namedtuple('AdInfoHeader', 'event bdaddr_type '
-                              + 'bdaddr length')
+    AdInfoHeader = namedtuple('AdInfoHeader', 'event bdaddr_type ' + 'bdaddr length')
     aih = AdInfoHeader._make(struct.unpack('<BB6sB', ad_packet[:9]))
     # Check if this is valid advertisement info
     if aih.bdaddr_type <= 0x01 and aih.length + 10 <= len(ad_packet):
@@ -214,8 +213,7 @@ def decode_ad_report(ad_packet):
       # adinfo length
       ret['adinfo_bytes'] = aih.length + 10
       # Add Bluetooth device address to return object
-      ret['bdaddr'] = ':'.join(reversed(['%02X' % ord(b)
-                                          for b in aih.bdaddr]))
+      ret['bdaddr'] = ':'.join(reversed(['%02X' % b for b in aih.bdaddr]))
       # Move to first ad struct
       ad_struct = ad_packet[9:]
       # Create default beacon_data
@@ -235,11 +233,11 @@ def decode_ad_report(ad_packet):
         # Go to the next ad struct
         ad_struct = ad_struct[beacon_data['adstruct_bytes']:]
       # Add beacon data to return object
-      for key, val in beacon_data.iteritems():
+      for key, val in beacon_data.items():
         if key != 'adstruct_bytes':
           ret[key] = val
       # Add observed RSSI to return object
-      ret['rssi_obs'], = struct.unpack('<b', ad_packet[aih.length + 9])
+      ret['rssi_obs'] = ad_packet[aih.length + 9]
   # Return the return object
   return ret
 
@@ -281,3 +279,4 @@ def bluez_decode_beacons(bluez_packet):
           beacons.append(ad_report)
   # Return the beacons list
   return beacons
+
